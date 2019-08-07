@@ -18,14 +18,12 @@ import {
     changePassword 
 } from '../actions/AutenticacaoActions';
 
-import Logo from './Logo';
-
-const frmLogin = props =>{
+const frmLogin = props => {
     return (
         <View style={styles.container}>
-            <Logo />
+            <Text style={{ fontSize: 50, color: 'white' }}>LeApp</Text>
             <StatusBar 
-                backgroundColor="#360b0b"
+                backgroundColor="#037e57"
                 barStyle="light-content"
             />
             <TextInput 
@@ -53,12 +51,13 @@ const frmLogin = props =>{
     );
 };
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#551111'
+        backgroundColor: '#03a657'
     },
     inputText: {
         width: 300,
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
     button: {
         width: 300,
         borderRadius: 25,
-        backgroundColor: '#360b0b',
+        backgroundColor: '#037e57',
         marginVertical: 10,
         paddingVertical: 12
     },
@@ -83,13 +82,13 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => {
-    return (
+const mapStateToProps = state => ({
+    return: (
         {
             email: state.AutenticacaoReducer.email,
             password: state.AutenticacaoReducer.password
         }
-    );
-};
+    )
+});
 
 export default connect(mapStateToProps, { changeEmail, changePassword })(frmLogin);

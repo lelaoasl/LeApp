@@ -6,7 +6,6 @@ import {
     Text,
     TextInput,
     StatusBar,
-    TouchableOpacity,
     TouchableHighlight,
     StyleSheet
 } from 'react-native';
@@ -17,27 +16,22 @@ import {
     changeEmail, 
     changePassword, 
     changeName, 
-    signupUser 
+    signUser 
 } from '../actions/AutenticacaoActions';
 
-import Logo from './Logo';
-
-
 class frmSignup extends Component {
-    verysignupUser() {
-        const name = this.props.name;
-        const email = this.props.email;
-        const password = this.props.password;
+    signupUser() {
+        const { name, email, password } = this.props;
 
-        this.props.signupUser({ name, email, password });
+        this.props.signUser({ name, email, password });
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Logo />
+                <Text style={{ fontSize: 50, color: 'white' }}>LeApp</Text>
                 <StatusBar 
-                    backgroundColor="#360b0b"
+                    backgroundColor="#037e57"
                     barStyle="light-content"
                 />
                 <TextInput
@@ -53,14 +47,17 @@ class frmSignup extends Component {
                     style={styles.inputText} 
                 />
                 <TextInput 
-                    value={this.props.password} 
+                    value={this.props.password}
+                    secureTextEntry
                     placeholderTextColor="#c1b8b8" 
                     placeholder="Password"onChangeText={text => this.props.changePassword(text)} 
                     style={styles.inputText} 
                 />
-                <TouchableOpacity onPress={() => this.verysignupUser()} style={styles.button}>
+                <TouchableHighlight onPress={() => this.signupUser()} style={styles.button}>
                     <Text style={styles.buttonText}>SignUp</Text>
-                </TouchableOpacity>
+                </TouchableHighlight>
+
+                <Text style={{ color: '#D8000C' }}>{this.props.signupError}</Text>
 
                 <Text style={{ color: '#c1b8b8' }}>Already an user?</Text>
                 <TouchableHighlight onPress={() => Actions.frmlogin()} >
@@ -76,7 +73,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#551111'
+        backgroundColor: '#03a657'
     },
     inputText: {
         width: 300,
@@ -89,7 +86,7 @@ const styles = StyleSheet.create({
     button: {
         width: 300,
         borderRadius: 25,
-        backgroundColor: '#360b0b',
+        backgroundColor: '#037e57',
         marginVertical: 10,
         paddingVertical: 12
     },
@@ -102,19 +99,23 @@ const styles = StyleSheet.create({
 });
 
 
-const mapStateToProps = state =>{
+const mapStateToProps = state => {
     return (
-    {
-        name: state.AutenticacaoReducer.name,
-        email: state.AutenticacaoReducer.email,
-        password: state.AutenticacaoReducer.password
-    }
-);
+        {
+            name: state.AutenticacaoReducer.name,
+            email: state.AutenticacaoReducer.email,
+            password: state.AutenticacaoReducer.password,
+            signupError: state.AutenticacaoReducer.signupError
+        }
+    );
 };
 
-export default connect(mapStateToProps, { 
-    changeEmail, 
-    changePassword, 
-    changeName, 
-    signupUser 
-})(frmSignup);
+export default connect(
+    mapStateToProps, 
+    { 
+        changeEmail, 
+        changePassword, 
+        changeName, 
+        signUser 
+    }
+)(frmSignup);
