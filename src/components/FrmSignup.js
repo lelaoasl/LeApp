@@ -19,6 +19,7 @@ import {
     signUser 
 } from '../actions/AutenticacaoActions';
 
+
 class frmSignup extends Component {
     signupUser() {
         const { name, email, password } = this.props;

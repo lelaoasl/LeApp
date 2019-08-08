@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { 
@@ -6,7 +6,6 @@ import {
     Text,
     TextInput,
     StatusBar,
-    TouchableOpacity,
     TouchableHighlight,
     StyleSheet
 } from 'react-native';
@@ -15,41 +14,53 @@ import { Actions } from 'react-native-router-flux';
 
 import { 
     changeEmail, 
-    changePassword 
+    changePassword,
+    authenticateUser,
 } from '../actions/AutenticacaoActions';
 
-const frmLogin = props => {
-    return (
-        <View style={styles.container}>
-            <Text style={{ fontSize: 50, color: 'white' }}>LeApp</Text>
-            <StatusBar 
-                backgroundColor="#037e57"
-                barStyle="light-content"
-            />
-            <TextInput 
-                value={props.email} 
-                placeholderTextColor="#c1b8b8" 
-                placeholder="Email" onChangeText={text => props.changeEmail(text)} 
-                style={styles.inputText} 
-            />
-            <TextInput 
-                value={props.password} 
-                placeholderTextColor="#c1b8b8" 
-                placeholder="Password" secureTextEntry
-                onChangeText={text => props.changePassword(text)} 
-                style={styles.inputText} 
-            />
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
 
-            <Text style={{ color: '#c1b8b8' }}>Does not have an account?</Text>
-            <TouchableHighlight onPress={() => Actions.frmsignup()} >
-                <Text style={{ color: '#ffffff' }}>Sign up</Text>        
-            </TouchableHighlight>
-        </View>
-    );
-};
+class frmLogin extends Component {
+    _authenticateUser() {
+        const { email, password } = this.props;
+
+        this.props.authenticateUser({ email, password });
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <Text style={{ fontSize: 50, color: 'white' }}>LeApp</Text>
+                <StatusBar 
+                    backgroundColor="#037e57"
+                    barStyle="light-content"
+                />
+                <TextInput 
+                    value={this.props.email} 
+                    placeholderTextColor="#c1b8b8" 
+                    placeholder="Email" onChangeText={text => this.props.changeEmail(text)} 
+                    style={styles.inputText} 
+                />
+                <TextInput 
+                    value={this.props.password} 
+                    placeholderTextColor="#c1b8b8" 
+                    placeholder="Password" secureTextEntry
+                    onChangeText={text => this.props.changePassword(text)} 
+                    style={styles.inputText} 
+                />
+                <TouchableHighlight style={styles.button} onPress={() => this._authenticateUser()}>
+                    <Text style={styles.buttonText}>Login</Text>
+                </TouchableHighlight>
+
+                <Text style={{ color: '#D8000C' }}>{this.props.loginError}</Text>
+
+                <Text style={{ color: '#c1b8b8' }}>Does not have an account?</Text>
+                <TouchableHighlight onPress={() => Actions.frmsignup()} >
+                    <Text style={{ color: '#ffffff' }}>Sign up</Text>        
+                </TouchableHighlight>
+            </View>
+        );
+    }
+}
 
 
 const styles = StyleSheet.create({
@@ -82,13 +93,21 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => ({
-    return: (
+const mapStateToProps = state => {
+    return (
         {
             email: state.AutenticacaoReducer.email,
-            password: state.AutenticacaoReducer.password
+            password: state.AutenticacaoReducer.password,
+            loginError: state.AutenticacaoReducer.loginError
         }
-    )
-});
+    );
+};
 
-export default connect(mapStateToProps, { changeEmail, changePassword })(frmLogin);
+export default connect(
+    mapStateToProps, 
+    { 
+        changeEmail, 
+        changePassword, 
+        authenticateUser 
+    }
+    )(frmLogin);
